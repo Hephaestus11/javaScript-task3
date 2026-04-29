@@ -205,6 +205,11 @@
         const username = document.getElementById("username").value.trim();
         const password = document.getElementById("password").value;
 
+        // Print the inputs to the Google Chrome Inspect Console
+        console.log("--- Form Submitted ---");
+        console.log("Username input:", username);
+        console.log("Password input:", password);
+
         // Evaluate the specific security constraints
         const isTooShort = password.length < 8;
 
