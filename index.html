@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registration | Premium UI</title>
+
+    <!-- Importing Inter font from Google Fonts for a modern, premium look -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* CSS Reset & Variable Definitions */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --primary: #4f46e5;
+        --primary-hover: #4338ca;
+        --bg-dark: #000000;
+        --bg-card: #ffffff;
+        --text-main: #000000;
+        --text-muted: #4b5563;
+        --border-color: #d1d5db;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: #000000;
+        color: var(--text-main);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      /* Card Container */
+      .login-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 3rem 2.5rem;
+        width: 100%;
+        max-width: 420px;
+        z-index: 1;
+        box-shadow: 0 10px 25px rgba(255, 255, 255, 0.05);
+        animation: slideUp 0.6s ease-out;
+      }
+
+      .card-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+      }
+
+      .card-header h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--text-main);
+      }
+
+      .card-header p {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+      }
+
+      /* Form Input Elements Styling */
+      .input-group {
+        margin-bottom: 1.5rem;
+        position: relative;
+      }
+
+      .input-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--text-muted);
+        transition: color 0.3s ease;
+      }
+
+      .input-group input {
+        width: 100%;
+        padding: 0.875rem 1rem;
+        background: #ffffff;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        color: var(--text-main);
+        font-size: 1rem;
+        font-family: inherit;
+        transition: all 0.3s ease;
+      }
+
+      .input-group input:focus {
+        outline: none;
+        border-color: var(--primary);
+        background: #ffffff;
+        box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+      }
+
+      .input-group input:focus + label {
+        color: var(--primary);
+      }
+
+      /* Custom Interactive Submit Button */
+      .submit-btn {
+        width: 100%;
+        padding: 1rem;
+        background: linear-gradient(
+          135deg,
+          var(--primary),
+          var(--primary-hover)
+        );
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 1.05rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 1rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Button Hover Gloss Effect */
+      .submit-btn::after {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: rgba(255, 255, 255, 0.1);
+        transform: rotate(45deg);
+        transition: all 0.3s ease;
+        opacity: 0;
+      }
+
+      .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4);
+      }
+
+      .submit-btn:hover::after {
+        opacity: 1;
+        transform: rotate(45deg) translate(10%, 10%);
+      }
+
+      .submit-btn:active {
+        transform: translateY(0);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Ambient glow element behind the main card -->
+    <div class="ambient-glow"></div>
+
+    <div class="login-card">
+      <div class="card-header">
+        <h1>Create Account</h1>
+        <p>Enter your details to register</p>
+      </div>
+
+      <!-- Registration Form -->
+      <form id="authForm" onsubmit="validateRegistration(event)">
+        <div class="input-group">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            placeholder="Enter your username"
+            required
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="••••••••"
+            required
+          />
+        </div>
+
+        <button type="submit" class="submit-btn">Register</button>
+      </form>
+    </div>
+
+    <script>
+      function validateRegistration(e) {
+        // Prevent the default form submission to handle validation logic
+        e.preventDefault();
+
+        // Retrieve the user inputs
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value;
+
+        // Evaluate the specific security constraints
+        const isTooShort = password.length < 8;
+
+        // Regex /^\d+$/ tests if the entire string contains digits only
+        const isOnlyIntegers = /^\d+$/.test(password);
+
+        // Regex /[A-Z]/ tests for uppercase, /[a-z]/ tests for lowercase
+        const lacksUppercase = !/[A-Z]/.test(password);
+        const lacksLowercase = !/[a-z]/.test(password);
+
+        // Condition Check: Prevents user from registering if ANY of the rules are violated
+        if (isTooShort || isOnlyIntegers || lacksUppercase || lacksLowercase) {
+          // Show native alert exactly matching the user's provided sample image
+          alert(
+            "Password should be more than 8 characters and contain both uppercase and lowercase characters.",
+          );
+          return;
+        }
+
+        // If all validation constraints are successfully met
+        alert("Registration successful! Welcome, " + username + ".");
+
+        // Optionally reset the form fields after successful validation
+        document.getElementById("authForm").reset();
+      }
+    </script>
+  </body>
+</html>
